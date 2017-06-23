@@ -1,0 +1,7 @@
+---
+name: trace-cmd
+
+dependencies: []
+
+files:
+- trace-cmd/trace-cmd_2.3.1.orig.tar.gz

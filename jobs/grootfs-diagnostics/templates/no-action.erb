@@ -1,0 +1,11 @@
+#!/bin/bash
+
+RUN_PATH=/var/vcap/sys/run/grootfs-diagnostics
+PID_FILE=${RUN_PATH}/grootfs-diagnostics.pid
+
+echo $$ > $PID_FILE
+
+while true
+do
+  sleep 120
+done

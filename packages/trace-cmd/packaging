@@ -1,0 +1,11 @@
+set -e
+
+mkdir $BOSH_INSTALL_TARGET/bin
+
+VERSION=2.3.1
+tar xzf trace-cmd/trace-cmd_$VERSION.orig.tar.gz
+(
+  cd trace-cmd-$VERSION
+  make
+  mv trace-cmd $BOSH_INSTALL_TARGET/bin
+)

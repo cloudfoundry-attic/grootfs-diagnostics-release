@@ -1,0 +1,6 @@
+---
+name: grootfs-diagnostics
+blobstore:
+  provider: s3
+  options:
+    bucket_name: grootfs-release

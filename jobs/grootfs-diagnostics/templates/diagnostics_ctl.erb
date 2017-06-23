@@ -1,0 +1,43 @@
+#!/bin/bash
+
+BIN_PATH=/var/vcap/jobs/grootfs-diagnostics/bin
+DATA_PATH=/var/vcap/data/grootfs-diagnostics
+TRACE_DAT=${DATA_PATH}/trace.dat
+RUN_PATH=/var/vcap/sys/run/grootfs-diagnostics
+PID_FILE=${RUN_PATH}/grootfs-diagnostics.pid
+export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
+
+mkdir -p $DATA_PATH
+mkdir -p $RUN_PATH
+
+TRACING_ENABLED=<%= !p("grootfs-diagnostics.disabled") %>
+
+case $1 in
+
+  start)
+    if [[ "$TRACING_ENABLED" == "false" ]]
+    then
+      ${BIN_PATH}/no-action
+    else
+      ${BIN_PATH}/run
+    fi
+
+    ;;
+
+  stop)
+    if [[ -f "$PID_FILE" ]]
+    then
+      kill $(cat $PID_FILE)
+      trace-cmd stop
+      rm $PID_FILE
+    fi
+
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+
+    ;;
+
+esac
+

@@ -1,0 +1,48 @@
+#!/bin/bash
+
+DATA_PATH=/var/vcap/data/grootfs-diagnostics
+TRACE_DAT=${DATA_PATH}/trace.dat
+RUN_PATH=/var/vcap/sys/run/grootfs-diagnostics
+LAST_RUN_PIDS=${RUN_PATH}/last_pids
+PID_FILE=${RUN_PATH}/grootfs-diagnostics.pid
+export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
+
+echo $$ > $PID_FILE
+
+stop_trace() {
+  trace-cmd stop -e <%= p("grootfs-diagnostics.event_glob") %>
+  trace-cmd stop
+}
+
+trace-cmd start -b <%= p("grootfs-diagnostics.trace_buffer_size") %> -e <%= p("grootfs-diagnostics.event_glob") %>
+trap stop_trace EXIT
+
+while true
+do
+  log_file_count=$(ls $DATA_PATH/trace.*.log.gz 2> /dev/null | wc -l)
+  if (( $log_file_count >= <%= p("grootfs-diagnostics.max_log_files") %> ))
+  then
+    sleep <%= p("grootfs-diagnostics.interval") %>
+    continue
+  fi
+
+  current_pids=$(ps axho pid,state | grep 'D' | cut -d D -f1)
+  for pid in $current_pids
+  do
+    if grep $pid $LAST_RUN_PIDS
+    then
+      timestamp=$(date "+%d-%m-%y__%H-%M-%S")
+      trace-cmd extract -o $TRACE_DAT
+      trace-cmd report -i $TRACE_DAT > $DATA_PATH/trace.${timestamp}.log
+      rm -rf $TRACE_DAT
+      gzip $DATA_PATH/trace.${timestamp}.log
+
+      trace-cmd start -b <%= p("grootfs-diagnostics.trace_buffer_size") %> -e <%= p("grootfs-diagnostics.event_glob") %>
+      break
+    fi
+  done
+
+  echo $current_pids > $LAST_RUN_PIDS
+
+  sleep <%= p("grootfs-diagnostics.interval") %>
+done

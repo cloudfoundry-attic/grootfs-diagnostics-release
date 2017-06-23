@@ -1,0 +1,5 @@
+check process grootfs-diagnostics
+  with pidfile /var/vcap/sys/run/grootfs-diagnostics/grootfs-diagnostics.pid
+  start program = "/var/vcap/jobs/grootfs-diagnostics/bin/diagnostics_ctl start"
+  stop program = "/var/vcap/jobs/grootfs-diagnostics/bin/diagnostics_ctl stop"
+  group vcap
