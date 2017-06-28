@@ -1,0 +1,3 @@
+[submodule "src/github.com/masters-of-cats/laika"]
+	path = src/github.com/masters-of-cats/laika
+	url = https://github.com/masters-of-cats/laika

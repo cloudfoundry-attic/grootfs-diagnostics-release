@@ -1,0 +1,12 @@
+#!/bin/bash
+
+cell_name="$(cat /var/vcap/instance/name)/$(cat /var/vcap/instance/id)"
+
+send_event_to_datadog() {
+  /var/vcap/packages/laika/bin/laika --datadog-api-key=<%= p("grootfs-diagnostics.datadog_api_key") %>  \
+    --datadog-app-key=<%= p("grootfs-diagnostics.datadog_app_key") %>  \
+    --prefix=grootfs-diagnostics \
+    --event-title="Dstate detected - come read logs!" \
+    --event-message=$cell_name \
+    --event-tag="grootfs-dstate"
+}

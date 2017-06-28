@@ -1,5 +1,6 @@
 #!/bin/bash
 
+BIN_PATH=/var/vcap/jobs/grootfs-diagnostics/bin
 DATA_PATH=/var/vcap/data/grootfs-diagnostics
 TRACE_DAT=${DATA_PATH}/trace.dat
 RUN_PATH=/var/vcap/sys/run/grootfs-diagnostics
@@ -7,40 +8,44 @@ LAST_RUN_PIDS=${RUN_PATH}/last_pids
 PID_FILE=${RUN_PATH}/grootfs-diagnostics.pid
 export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
 
+mkdir -p $DATA_PATH
+mkdir -p $RUN_PATH
+
 echo $$ > $PID_FILE
 
-stop_trace() {
-  trace-cmd stop -e <%= p("grootfs-diagnostics.event_glob") %>
-  trace-cmd stop
-}
+<% if !p('grootfs-diagnostics.disabled') %>
+source ${BIN_PATH}/no-action
+<% else %>
+source ${BIN_PATH}/xfs-trace
+<% end %>
 
-trace-cmd start -b <%= p("grootfs-diagnostics.trace_buffer_size") %> -e <%= p("grootfs-diagnostics.event_glob") %>
-trap stop_trace EXIT
+source ${BIN_PATH}/report-dstate
 
+start_trace
+
+touch ${LAST_RUN_PIDS}
 while true
 do
-  log_file_count=$(ls $DATA_PATH/trace.*.log.gz 2> /dev/null | wc -l)
-  if (( $log_file_count >= <%= p("grootfs-diagnostics.max_log_files") %> ))
-  then
-    sleep <%= p("grootfs-diagnostics.interval") %>
-    continue
-  fi
+  dstate_detected=false
+  check_max_trace_logs_reached
 
   current_pids=$(ps axho pid,state | grep 'D' | cut -d D -f1)
   for pid in $current_pids
   do
     if grep $pid $LAST_RUN_PIDS
     then
-      timestamp=$(date "+%d-%m-%y__%H-%M-%S")
-      trace-cmd extract -o $TRACE_DAT
-      trace-cmd report -i $TRACE_DAT > $DATA_PATH/trace.${timestamp}.log
-      rm -rf $TRACE_DAT
-      gzip $DATA_PATH/trace.${timestamp}.log
 
-      trace-cmd start -b <%= p("grootfs-diagnostics.trace_buffer_size") %> -e <%= p("grootfs-diagnostics.event_glob") %>
-      break
+      dstate_detected=true
+      continue
+
     fi
   done
+
+  if $dstate_detected
+  then
+    extract_trace_data
+    send_event_to_datadog
+  fi
 
   echo $current_pids > $LAST_RUN_PIDS
 
