@@ -29,6 +29,7 @@ do
   dstate_detected=false
   check_max_trace_logs_reached
 
+  current_dstate=$(ps axho pid,state,comm | grep 'D')
   current_pids=$(ps axho pid,state | grep 'D' | cut -d D -f1)
   for pid in $current_pids
   do
@@ -44,7 +45,7 @@ do
   if $dstate_detected
   then
     extract_trace_data
-    send_event_to_datadog
+    collect_debug_info "$current_pids" "$current_dstate"
   fi
 
   echo $current_pids > $LAST_RUN_PIDS

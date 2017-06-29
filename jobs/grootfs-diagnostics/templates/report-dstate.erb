@@ -1,12 +1,71 @@
 #!/bin/bash
 
-cell_name="$(cat /var/vcap/instance/name)/$(cat /var/vcap/instance/id)"
+CELL_ID=$(cat /var/vcap/instance/id)
+CELL_NAME="$(cat /var/vcap/instance/name)"
+VCAP_DATA_PATH=/var/vcap/data/grootfs-diagnostics
+
+collect_debug_info() {
+  local dstate_pids=$1
+  local dstate_processes=$2
+  local timestamp=$(date "+%d-%m-%y_%H-%M-%S")
+  local debug_info_dir="${CELL_NAME}-${CELL_ID}-debug-info-${timestamp}"
+  local debug_data_path="${VCAP_DATA_PATH}/${debug_info_dir}"
+
+  mkdir -p ${debug_data_path}
+
+  echo "$dstate_processes" > ${debug_data_path}/dstate-processes
+  get_app_data "$dstate_pids" $debug_data_path
+  get_system_info $debug_data_path
+
+  pushd ${VCAP_DATA_PATH}
+    tar zcf ${debug_info_dir}.tar.gz ${debug_info_dir}
+  popd
+
+  send_event_to_datadog "${VCAP_DATA_PATH}/${debug_info_dir}.tar.gz"
+
+  cleanup
+}
+
+get_app_data() {
+  local dstate_pids=$1
+  local debug_data_path=$2
+
+  mkdir -p ${debug_data_path}/applications
+  for pid in ${dstate_pids}
+  do
+     env=$(cat /proc/${pid}/environ | tr "\\0" "\n" | grep VCAP_APPLICATION)
+     if [ $env ]
+     then
+       echo ${env} | cut -d '=' -f 2 | python -mjson.tool > "${debug_data_path}/applications/${pid}-app-data"
+     fi
+  done
+}
+
+get_system_info() {
+  local debug_data_path=$1
+
+  mpstat -P ALL > ${debug_data_path}/mpstat
+  vmstat > ${debug_data_path}/vmstat
+  dmesg > ${debug_data_path}/dmesg
+  sar > ${debug_data_path}/sar
+  sar -n DEV > ${debug_data_path}/sar-dev
+  iostat -xz > ${debug_data_path}/iostat
+  uptime > ${debug_data_path}/uptime
+  pidstat > ${debug_data_path}/pidstat
+}
 
 send_event_to_datadog() {
+  local tar_path=$1
+
   /var/vcap/packages/laika/bin/laika --datadog-api-key=<%= p("grootfs-diagnostics.datadog_api_key") %>  \
     --datadog-app-key=<%= p("grootfs-diagnostics.datadog_app_key") %>  \
     --prefix=grootfs-diagnostics \
     --event-title="Dstate detected - come read logs!" \
-    --event-message=$cell_name \
+    --event-message="Dstate detected on ${CELL_NAME}/${CELL_ID}. Logs can be found here: ${tar_path}" \
     --event-tag="grootfs-dstate"
+}
+
+cleanup() {
+  # todo
+  return
 }
