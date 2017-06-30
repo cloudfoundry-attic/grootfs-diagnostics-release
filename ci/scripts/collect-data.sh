@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e -x
+set -e
 
 dstate_json=$(cat dstate-event/event.json | jq -r .text)
 CELL_NAME=$(echo $dstate_json | jq -r '.cell_name')
