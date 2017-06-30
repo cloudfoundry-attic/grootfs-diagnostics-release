@@ -2,7 +2,7 @@
 set -e -x
 
 event_text=$(cat dstate-event/event.json | jq .text)
-dstate_json=$(echo "$event_test" | tr -d '\')
+dstate_json=$(echo "$event_text" | tr -d '\')
 
 CELL_NAME=$(echo $dstate_json | jq '.cell_name')
 CELL_ID=$(echo $dstate_json | jq '.cell_id')
