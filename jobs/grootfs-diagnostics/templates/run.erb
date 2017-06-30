@@ -13,10 +13,10 @@ mkdir -p $RUN_PATH
 
 echo $$ > $PID_FILE
 
-<% if !p('grootfs-diagnostics.disabled') %>
-source ${BIN_PATH}/no-action
-<% else %>
+<% if p('grootfs-diagnostics.tracing_enabled') %>
 source ${BIN_PATH}/xfs-trace
+<% else %>
+source ${BIN_PATH}/no-action
 <% end %>
 
 source ${BIN_PATH}/report-dstate

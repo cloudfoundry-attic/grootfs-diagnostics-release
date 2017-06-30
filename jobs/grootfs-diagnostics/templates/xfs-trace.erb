@@ -5,18 +5,18 @@ TRACE_DAT=${DATA_PATH}/trace.dat
 export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
 
 stop_trace() {
-  trace-cmd stop -e <%= p("grootfs-diagnostics.event_glob") %>
+  trace-cmd stop -e <%= p("grootfs-diagnostics.tracing_event_glob") %>
   trace-cmd stop
 }
 
 start_trace() {
-  trace-cmd start -b <%= p("grootfs-diagnostics.trace_buffer_size") %> -e <%= p("grootfs-diagnostics.event_glob") %>
+  trace-cmd start -b <%= p("grootfs-diagnostics.tracing_buffer_size") %> -e <%= p("grootfs-diagnostics.tracing_event_glob") %>
   trap stop_trace EXIT
 }
 
 check_max_trace_logs_reached() {
   log_file_count=$(ls $DATA_PATH/trace.*.log.gz 2> /dev/null | wc -l)
-  if (( $log_file_count >= <%= p("grootfs-diagnostics.max_log_files") %> ))
+  if (( $log_file_count >= <%= p("grootfs-diagnostics.tracing_max_log_files") %> ))
   then
     sleep <%= p("grootfs-diagnostics.interval") %>
     continue
@@ -30,5 +30,5 @@ extract_trace_data() {
   rm -rf $TRACE_DAT
   gzip $DATA_PATH/trace.${timestamp}.log
 
-  trace-cmd start -b <%= p("grootfs-diagnostics.trace_buffer_size") %> -e <%= p("grootfs-diagnostics.event_glob") %>
+  trace-cmd start -b <%= p("grootfs-diagnostics.tracing_buffer_size") %> -e <%= p("grootfs-diagnostics.tracing_event_glob") %>
 }

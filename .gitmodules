@@ -3,4 +3,4 @@
 	url = https://github.com/masters-of-cats/laika
 [submodule "src/code.cloudfoundry.org/badapps"]
 	path = src/code.cloudfoundry.org/badapps
-	url = git@github.com:cloudfoundry/badapps.git
+	url = https://github.com/cloudfoundry/badapps.git

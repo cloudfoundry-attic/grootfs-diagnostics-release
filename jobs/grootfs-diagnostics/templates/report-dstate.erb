@@ -14,7 +14,7 @@ collect_debug_info() {
   mkdir -p ${debug_data_path}
 
   echo "$dstate_processes" > ${debug_data_path}/dstate-processes
-  get_app_data "$dstate_pids" $debug_data_path
+  get_app_data $debug_data_path
   get_system_info $debug_data_path
 
   pushd ${VCAP_DATA_PATH}
@@ -23,22 +23,12 @@ collect_debug_info() {
 
   send_event_to_datadog "${VCAP_DATA_PATH}/${debug_info_dir}.tar.gz"
 
-  cleanup
+  rm -rf $debug_data_path
 }
 
 get_app_data() {
-  local dstate_pids=$1
-  local debug_data_path=$2
-
-  mkdir -p ${debug_data_path}/applications
-  for pid in ${dstate_pids}
-  do
-     env=$(cat /proc/${pid}/environ | tr "\\0" "\n" | grep VCAP_APPLICATION)
-     if [ $env ]
-     then
-       echo ${env} | cut -d '=' -f 2 | python -mjson.tool > "${debug_data_path}/applications/${pid}-app-data"
-     fi
-  done
+  local debug_data_path=$1
+  /var/vcap/packages/badapps/bin/badapps | python -mjson.tool > "${debug_data_path}/applications.json"
 }
 
 get_system_info() {
@@ -60,12 +50,7 @@ send_event_to_datadog() {
   /var/vcap/packages/laika/bin/laika --datadog-api-key=<%= p("grootfs-diagnostics.datadog_api_key") %>  \
     --datadog-app-key=<%= p("grootfs-diagnostics.datadog_app_key") %>  \
     --prefix=grootfs-diagnostics \
-    --event-title="Dstate detected - come read logs!" \
-    --event-message="Dstate detected on ${CELL_NAME}/${CELL_ID}. Logs can be found here: ${tar_path}" \
+    --event-title="grootfs-diagnostics: d-state detected" \
+    --event-message="{\"cell_name\":\"${CELL_NAME}\",\"cell_id\":\"${CELL_ID}\",\"logs_path\":\"${tar_path}\"}" \
     --event-tag="grootfs-dstate"
-}
-
-cleanup() {
-  # todo
-  return
 }

@@ -8,7 +8,7 @@ mkdir -p ${BOSH_INSTALL_TARGET}/src
 cp -ra * ${BOSH_INSTALL_TARGET}/src
 
 mkdir ${BOSH_INSTALL_TARGET}/bin
-pushd ${BOSH_INSTALL_TARGET}/src/code.cloufoundry.org/badapps
+pushd ${BOSH_INSTALL_TARGET}/src/code.cloudfoundry.org/badapps
   go build .
   mv badapps ${BOSH_INSTALL_TARGET}/bin
 popd

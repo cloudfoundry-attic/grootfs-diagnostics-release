@@ -10,24 +10,25 @@ templates:
 
 packages:
   - trace-cmd
+  - badapps
   - laika
 
 properties:
-  grootfs-diagnostics.disabled:
-    description: "deploy grootfs-diagnostics in non-running state"
+  grootfs-diagnostics.tracing_enabled:
+    description: "enable kernel tracing and bumping for D-state debugging"
     default: false
-  grootfs-diagnostics.trace_buffer_size:
+  grootfs-diagnostics.tracing_buffer_size:
     description: "kernel buffersize (in kilobytes per CPU)"
     default: 20080
-  grootfs-diagnostics.event_glob:
+  grootfs-diagnostics.tracing_event_glob:
     description: "event to trace"
     default: xfs\*
+  grootfs-diagnostics.tracing_max_log_files:
+    description: "number of trace logs to keep. when number is met trace reporting will stop"
+    default: 10
   grootfs-diagnostics.interval:
     description: "time in seconds beforze (in kilobytes per CPU)s a process in D state is considered stale"
     default: 150
-  grootfs-diagnostics.max_log_files:
-    description: "number of trace logs to keep. when number is met trace reporting will stop"
-    default: 10
   grootfs-diagnostics.datadog_api_key:
     description: "api key to send dstate events to datadog"
   grootfs-diagnostics.datadog_app_key:
