@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -e -x
 
 event_text=$(cat dstate-event/event.json | jq .text)
 dstate_json=$(echo "$event_test" | tr -d '\')
