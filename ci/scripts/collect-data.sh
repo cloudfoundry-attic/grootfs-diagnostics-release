@@ -2,9 +2,9 @@
 set -e -x
 
 dstate_json=$(cat dstate-event/event.json | jq -r .text)
-CELL_NAME=$(echo $dstate_json | jq '.cell_name')
-CELL_ID=$(echo $dstate_json | jq '.cell_id')
-TAR_PATH=$(echo $dstate_json | jq '.logs_path')
+CELL_NAME=$(echo $dstate_json | jq -r '.cell_name')
+CELL_ID=$(echo $dstate_json | jq -r '.cell_id')
+TAR_PATH=$(echo $dstate_json | jq -r '.logs_path')
 
 echo "$BOSH_CERTIFICATES" > certificates.yml
 bosh2 int --path "/certs/ca_cert" certificates.yml > ca_cert.crt
