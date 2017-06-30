@@ -1,0 +1,25 @@
+---
+image_resource:
+  type: docker-image
+  source:
+    repository: cfgarden/grootfs-ci
+    tag: latest
+
+platform: linux
+
+inputs:
+  - name: grootfs-diagnostics-release
+  - name: dstate-event
+outputs:
+  - name: diagnostics
+
+params:
+  BOSH_TARGET:
+  BOSH_CLIENT:
+  BOSH_CLIENT_SECRET:
+  BOSH_DEPLOYMENT:
+  BOSH_CERTIFICATES:
+
+run:
+  path: grootfs-diagnostics-release/ci/scripts/collect-data.sh
+  user: root
