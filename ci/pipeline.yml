@@ -52,7 +52,7 @@ jobs:
             channel: "cf-grootfs"
             username: "Santa"
             icon_url: "https://media.giphy.com/media/vTn5ap94xD9nO/giphy.gif"
-            text: "<!subteam^S5YHYPBV4|grootfsteam>:: D-STATE DETECTED! :red_circle: :red_circle: :red_circle: :red_circle:"
+            text: "<!subteam^S5YHYPBV4|grootfsteam>:<!subteam^S5F6U0H7D|CloudOpsSF>: D-STATE DETECTED! :red_circle: :red_circle: :red_circle: :red_circle:"
 
 resource_types:
   - name: datadog-event
