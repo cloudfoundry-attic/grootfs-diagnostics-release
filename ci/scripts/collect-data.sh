@@ -1,9 +1,7 @@
 #!/bin/bash
 set -e -x
 
-event_text=$(cat dstate-event/event.json | jq .text)
-dstate_json=$(echo "$event_text" | tr -d '\')
-
+dstate_json=$(cat dstate-event/event.json | jq -r .text)
 CELL_NAME=$(echo $dstate_json | jq '.cell_name')
 CELL_ID=$(echo $dstate_json | jq '.cell_id')
 TAR_PATH=$(echo $dstate_json | jq '.logs_path')
