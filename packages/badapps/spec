@@ -1,0 +1,8 @@
+---
+name: badapps
+
+dependencies:
+  - golang
+
+files:
+  - code.cloudfoundry.org/badapps/**/*.go
