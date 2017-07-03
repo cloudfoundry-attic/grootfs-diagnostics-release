@@ -40,7 +40,7 @@ set_pipeline_lakitu() {
 set_pipeline_grootfs() {
 
   lpass show 'Shared-Garden/grootfs-deployments\thanos/certificates' --notes > /tmp/ci-certs.yml
-  cert="$(bosh2 int /tmp/ci-certs.yml)"
+  cert="$(bosh2 int --path /certs/ca_cert /tmp/ci-certs.yml)"
   rm -rf /tmp/ci-certs
 
 
