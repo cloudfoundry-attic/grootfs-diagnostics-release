@@ -4,3 +4,6 @@
 [submodule "src/code.cloudfoundry.org/badapps"]
 	path = src/code.cloudfoundry.org/badapps
 	url = https://github.com/cloudfoundry/badapps.git
+[submodule "src/github.com/masters-of-cats/metatron"]
+	path = src/github.com/masters-of-cats/metatron
+	url = http://github.com/masters-of-cats/metatron.git

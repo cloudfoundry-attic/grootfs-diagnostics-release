@@ -1,0 +1,8 @@
+---
+name: metatron
+
+dependencies:
+  - golang
+
+files:
+  - github.com/masters-of-cats/metatron/**/*.go

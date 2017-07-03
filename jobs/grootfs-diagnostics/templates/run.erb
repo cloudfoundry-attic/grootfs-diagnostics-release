@@ -20,6 +20,7 @@ source ${BIN_PATH}/no-action
 <% end %>
 
 source ${BIN_PATH}/report-dstate
+source ${BIN_PATH}/dstate-counter
 
 start_trace
 
@@ -48,6 +49,7 @@ do
     collect_debug_info "$current_pids" "$current_dstate"
   fi
 
+  dstate_counter
   echo $current_pids > $LAST_RUN_PIDS
 
   sleep <%= p("grootfs-diagnostics.interval") %>
