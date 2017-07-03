@@ -9,17 +9,8 @@ platform: linux
 
 inputs:
   - name: grootfs-diagnostics-release
-  - name: dstate-event
-outputs:
   - name: diagnostics
 
-params:
-  BOSH_TARGET:
-  BOSH_CLIENT:
-  BOSH_CLIENT_SECRET:
-  BOSH_DEPLOYMENT:
-  BOSH_CA_CERT:
-
 run:
-  path: grootfs-diagnostics-release/ci/scripts/collect-data.sh
+  path: grootfs-diagnostics-release/ci/scripts/print-data.sh
   user: root

@@ -1,10 +1,12 @@
 #!/bin/bash -ex
 cd $(dirname $0)/..
 
+set -e
+
 flyrc_target=$1
 if [ -z $flyrc_target ]; then
   echo "No target passed, using 'grootfs-ci'"
-  flyrc_target="lakitu"
+  flyrc_target="grootfs-ci"
 fi
 
 main() {
@@ -15,11 +17,15 @@ main() {
   vars_name="gcp"
   pipeline_file="pipeline.yml"
 
-  set_pipeline
+  if [ $flyrc_target == 'lakitu' ]; then
+    set_pipeline_lakitu
+  else
+    set_pipeline_grootfs
+  fi
   expose_pipeline
 }
 
-set_pipeline() {
+set_pipeline_lakitu() {
   fly --target="$flyrc_target" set-pipeline --pipeline=$pipeline_name \
     --config=ci/${pipeline_file} \
     --var slack-alert-url="$(lpass show 'Shared-Garden/grootfs-pivotal-slack-hook' --url)" \
@@ -29,6 +35,28 @@ set_pipeline() {
     --var bosh-deployment-name=cf-cfapps-io2-diego \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_bosh_secrets.yml \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_app_specific_configs.yml
+}
+
+set_pipeline_grootfs() {
+
+  lpass show 'Shared-Garden/grootfs-deployments\thanos/certificates' --notes > /tmp/ci-certs.yml
+  cert="$(bosh2 int /tmp/ci-certs.yml)"
+  rm -rf /tmp/ci-certs
+
+
+  fly --target="$flyrc_target" set-pipeline --pipeline=$pipeline_name \
+    --config=ci/${pipeline_file} \
+    --var slack-alert-url="$(lpass show 'Shared-Garden/grootfs-pivotal-slack-hook' --url)" \
+    --var aws-access-key-id="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --username)" \
+    --var aws-secret-access-key="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --password)" \
+    --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --password)" \
+    --var bosh-deployment-name=cf-cfapps-io2-diego \
+    --var prod_bosh_username="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --username)" \
+    --var prod_bosh_password="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --password)" \
+    --var prod_bosh_ca_cert="$cert" \
+    --var prod_bosh_target="https://10.0.0.6" \
+    --var PROD_DATADOG_API_KEY="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --username)" \
+    --var bosh-deployment-name="cf"
 }
 
 expose_pipeline() {

@@ -6,8 +6,7 @@ CELL_NAME=$(echo $dstate_json | jq -r '.cell_name')
 CELL_ID=$(echo $dstate_json | jq -r '.cell_id')
 TAR_PATH=$(echo $dstate_json | jq -r '.logs_path')
 
-echo "$BOSH_CERTIFICATES" > certificates.yml
-bosh2 int --path "/certs/ca_cert" certificates.yml > ca_cert.crt
+echo "$BOSH_CA_CERT" > ca_cert.crt
 
 echo "Running performance tests..."
 bosh2 -e $BOSH_TARGET --ca-cert ca_cert.crt alias-env bosh-director
