@@ -2,7 +2,7 @@ resources:
   - name: dstate-event
     type: datadog-event
     source:
-      api_key: {{datadog-api-key}}
+      api_key: {{PROD_DATADOG_API_KEY}}
       application_key: {{datadog-application-key}}
       filter: "Dstate detected"
       #filter: "grootfs-diagnostics: d-state"
@@ -38,11 +38,11 @@ jobs:
           file: grootfs-diagnostics-release/ci/tasks/collect-data.yml
           privileged: true
           params:
-            BOSH_TARGET: {{bosh-target}}
-            BOSH_CLIENT: {{bosh-username}}
-            BOSH_CLIENT_SECRET: {{bosh-password}}
-            BOSH_CERTIFICATES: {{bosh-certificates}}
-            BOSH_DEPLOYMENT: cf
+            BOSH_TARGET: {{prod_bosh_target}}
+            BOSH_CLIENT: {{prod_bosh_username}}
+            BOSH_CLIENT_SECRET: {{prod_bosh_password}}
+            BOSH_CERTIFICATES: {{prod_bosh_ca_cert}}
+            BOSH_DEPLOYMENT: {{bosh-deployment-name}}
         - put: dstate-diagnostics-tarball
           params:
             file: diagnostics/*.tar.gz

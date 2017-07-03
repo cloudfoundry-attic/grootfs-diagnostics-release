@@ -4,7 +4,7 @@ cd $(dirname $0)/..
 flyrc_target=$1
 if [ -z $flyrc_target ]; then
   echo "No target passed, using 'grootfs-ci'"
-  flyrc_target="grootfs-ci"
+  flyrc_target="lakitu"
 fi
 
 main() {
@@ -25,13 +25,10 @@ set_pipeline() {
     --var slack-alert-url="$(lpass show 'Shared-Garden/grootfs-pivotal-slack-hook' --url)" \
     --var aws-access-key-id="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --username)" \
     --var aws-secret-access-key="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --password)" \
-    --var datadog-api-key="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --username)" \
     --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --password)" \
-    --var bosh-target="https://10.0.0.6" \
-    --var bosh-username="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --username)" \
-    --var bosh-password="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --password)" \
-    --var bosh-certificates="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/certificates' --notes)" \
-    --var thanos-cf-diego-certs="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/cf-diego-certs' --notes)"
+    --var bosh-deployment-name=cf-cfapps-io2-diego \
+    --load-vars-from $HOME/workspace/secrets-prod/ci/ci_bosh_secrets.yml \
+    --load-vars-from $HOME/workspace/secrets-prod/ci/ci_app_specific_configs.yml
 }
 
 expose_pipeline() {
