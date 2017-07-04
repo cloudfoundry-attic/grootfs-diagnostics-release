@@ -1,16 +1,8 @@
-blobs/golang:
-  size: 91277742
-  sha: a433f76c569055ff8536d796995518dd91a9fa5b
-golang:
-  size: 91277742
-  sha: a433f76c569055ff8536d796995518dd91a9fa5b
-golang/:
-  size: 91277742
-  sha: a433f76c569055ff8536d796995518dd91a9fa5b
 golang/go1.8.1.linux-amd64.tar.gz:
   size: 91277742
+  object_id: 8d6e21b8-148c-46a4-6526-5bade0bd465a
   sha: a433f76c569055ff8536d796995518dd91a9fa5b
-trace-cmd/trace-cmd_2.3.1.orig.tar.gz:
-  size: 1784414
-  object_id: 5000e106-43d6-4ba3-4f8a-adb4ebb26418
-  sha: 7df6521d33ae143cd2763e6d4513d510e479b89b
+trace-cmd/trace-cmd-v2.6.1.tar.gz:
+  size: 1860029
+  object_id: fd04b287-1f0a-40df-6e8b-7acd2aa05db6
+  sha: 2232c7127e9e110bc64bf89f4cd8150d8f105e7d

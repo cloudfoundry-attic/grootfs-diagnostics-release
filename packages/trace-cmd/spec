@@ -4,4 +4,4 @@ name: trace-cmd
 dependencies: []
 
 files:
-- trace-cmd/trace-cmd_2.3.1.orig.tar.gz
+- trace-cmd/trace-cmd-v2.6.1.tar.gz
