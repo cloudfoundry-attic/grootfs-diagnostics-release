@@ -22,14 +22,22 @@ source ${BIN_PATH}/no-action
 source ${BIN_PATH}/report-dstate
 source ${BIN_PATH}/dstate-counter
 
-start_trace
+dstate_reported=false
 
-touch ${LAST_RUN_PIDS}
-while true
-do
-  dstate_detected=false
-  check_max_trace_logs_reached
+main() {
+  start_trace
 
+  touch ${LAST_RUN_PIDS}
+  while true
+  do
+    report_dstate_processes
+    dstate_counter
+
+    sleep <%= p("grootfs-diagnostics.interval") %>
+  done
+}
+
+report_dstate_processes() {
   current_dstate=$(ps axho pid,state,comm | grep 'D')
   current_pids=$(ps axho pid,state | grep 'D' | cut -d D -f1)
   for pid in $current_pids
@@ -37,20 +45,16 @@ do
     if grep $pid $LAST_RUN_PIDS
     then
 
-      dstate_detected=true
-      continue
+      extract_trace_data
+      ${dstate_reported} && return
+
+      collect_debug_info "$current_pids" "$current_dstate"
+      dstate_reported=true
+      break
 
     fi
   done
-
-  if $dstate_detected
-  then
-    extract_trace_data
-    collect_debug_info "$current_pids" "$current_dstate"
-  fi
-
-  dstate_counter
   echo $current_pids > $LAST_RUN_PIDS
+}
 
-  sleep <%= p("grootfs-diagnostics.interval") %>
-done
+main

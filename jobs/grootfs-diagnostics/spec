@@ -29,7 +29,7 @@ properties:
     description: "number of trace logs to keep. when number is met trace reporting will stop"
     default: 10
   grootfs-diagnostics.interval:
-    description: "time in seconds beforze (in kilobytes per CPU)s a process in D state is considered stale"
+    description: "time in seconds before a process in D state is considered stale"
     default: 150
   grootfs-diagnostics.datadog_api_key:
     description: "api key to send dstate events to datadog"

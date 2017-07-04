@@ -4,6 +4,8 @@ dstate_counter() {
   currenttime=$(date +%s)
   count=$(ps axho state | grep 'D' | wc -l)
 
+  echo "${currenttime}: Total D-State processes: ${count}"
+
   /var/vcap/packages/metatron/bin/metatron --metron-endpoint="127.0.0.1:<%= p('grootfs-diagnostics.dropsonde_port') %>" \
     --prefix="grootfs" \
     --name="dstate-processes" \

@@ -4,16 +4,18 @@ BIN_PATH=/var/vcap/jobs/grootfs-diagnostics/bin
 DATA_PATH=/var/vcap/data/grootfs-diagnostics
 TRACE_DAT=${DATA_PATH}/trace.dat
 RUN_PATH=/var/vcap/sys/run/grootfs-diagnostics
+LOG_PATH=/var/vcap/sys/log/grootfs-diagnostics
 PID_FILE=${RUN_PATH}/grootfs-diagnostics.pid
 export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
 
 mkdir -p $DATA_PATH
 mkdir -p $RUN_PATH
+mkdir -p $LOG_PATH
 
 case $1 in
 
   start)
-    ${BIN_PATH}/run
+    ${BIN_PATH}/run > $LOG_PATH/diagnostics_ctl.stdout.log 2> $LOG_PATH/diagnostics_ctl.stderr.log
 
     ;;
 
