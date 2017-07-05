@@ -51,8 +51,8 @@ set_pipeline_grootfs() {
     --var aws-secret-access-key="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --password)" \
     --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --password)" \
     --var bosh-deployment-name=cf-cfapps-io2-diego \
-    --var prod_bosh_username="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --username)" \
-    --var prod_bosh_password="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --password)" \
+    --var prod_bosh_client_id="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --username)" \
+    --var prod_bosh_client_secret="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --password)" \
     --var prod_bosh_ca_cert="$cert" \
     --var prod_bosh_target="https://10.0.0.6" \
     --var PROD_DATADOG_API_KEY="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --username)" \
