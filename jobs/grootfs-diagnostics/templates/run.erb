@@ -54,12 +54,13 @@ report_dstate_processes() {
       local timestamp=$(date "+%d-%m-%y_%H-%M-%S")
       local output_name="${CELL_NAME}-${CELL_ID}-debug-info-${timestamp}"
       local output_path="${VCAP_DATA_PATH}/${output_name}"
+      mkdir -p $output_path
 
-      extract_trace_data
+      extract_trace_data "$output_path"
       ${dstate_reported} && return
 
       collect_debug_info "$output_path"
-      report_dstate "$output_path"
+      report_dstate "$output_path" "$CELL_NAME" "$CELL_ID"
       dstate_reported=true
       break
 
