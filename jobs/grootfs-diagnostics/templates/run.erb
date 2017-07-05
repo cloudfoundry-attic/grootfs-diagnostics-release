@@ -42,7 +42,7 @@ report_dstate_processes() {
   current_pids=$(ps axho pid,state | grep 'D' | cut -d D -f1)
   for pid in $current_pids
   do
-    if grep $pid $LAST_RUN_PIDS
+    if grep $pid $LAST_RUN_PIDS > /dev/null
     then
 
       extract_trace_data
