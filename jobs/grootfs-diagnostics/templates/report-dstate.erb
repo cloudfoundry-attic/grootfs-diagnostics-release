@@ -7,12 +7,16 @@ VCAP_DATA_PATH=/var/vcap/data/grootfs-diagnostics
 collect_debug_info() {
   local dstate_pids=$1
   local dstate_processes=$2
+  local xfs_trace=$3
   local timestamp=$(date "+%d-%m-%y_%H-%M-%S")
   local debug_info_dir="${CELL_NAME}-${CELL_ID}-debug-info-${timestamp}"
   local debug_data_path="${VCAP_DATA_PATH}/${debug_info_dir}"
 
   mkdir -p ${debug_data_path}
 
+  if [ ! -z $xfs_trace ]; then
+    cp ${xfs_trace} ${debug_data_path}
+  fi
   echo "$dstate_processes" > ${debug_data_path}/dstate-processes
   get_app_data $debug_data_path
   get_system_info $debug_data_path

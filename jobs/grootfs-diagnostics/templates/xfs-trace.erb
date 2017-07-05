@@ -21,17 +21,20 @@ start_trace() {
 
 extract_trace_data() {
   if max_trace_logs_reached; then
-    echo "Max trace logs reached. Skipping extract trace data"
+    echo 1>&2 "Max trace logs reached. Skipping extract trace data"
     return
   fi
 
   timestamp=$(date "+%d-%m-%y__%H-%M-%S")
+  logs_archive=$DATA_PATH/trace.${timestamp}.log
   trace-cmd extract -o $TRACE_DAT
   trace-cmd report -i $TRACE_DAT > $DATA_PATH/trace.${timestamp}.log
   rm -rf $TRACE_DAT
-  gzip $DATA_PATH/trace.${timestamp}.log
+  gzip $logs_archive
 
   trace-cmd start -b <%= p("grootfs-diagnostics.tracing_buffer_size") %> -e <%= p("grootfs-diagnostics.tracing_event_glob") %>
+
+  echo $logs_archive
 }
 
 max_trace_logs_reached() {

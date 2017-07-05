@@ -45,10 +45,10 @@ report_dstate_processes() {
     if grep $pid $LAST_RUN_PIDS
     then
 
-      extract_trace_data
+      xfs_trace_data=$(extract_trace_data)
       ${dstate_reported} && return
 
-      collect_debug_info "$current_pids" "$current_dstate"
+      collect_debug_info "$current_pids" "$current_dstate" "$xfs_trace_data"
       dstate_reported=true
       break
 
