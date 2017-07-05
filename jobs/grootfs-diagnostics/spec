@@ -6,6 +6,7 @@ templates:
   run.erb: bin/run
   no-action.erb: bin/no-action
   dstate-counter.erb: bin/dstate-counter
+  collect-data.erb: bin/collect-data
   xfs-trace.erb: bin/xfs-trace
   report-dstate.erb: bin/report-dstate
 

@@ -1,56 +1,26 @@
 #!/bin/bash
 
-CELL_ID=$(cat /var/vcap/instance/id)
-CELL_NAME="$(cat /var/vcap/instance/name)"
-VCAP_DATA_PATH=/var/vcap/data/grootfs-diagnostics
+report_dstate() {
+  local output_path=$1
+  local cell_name=$2
+  local cell_id=$3
 
-collect_debug_info() {
-  local dstate_pids=$1
-  local dstate_processes=$2
-  local timestamp=$(date "+%d-%m-%y_%H-%M-%S")
-  local debug_info_dir="${CELL_NAME}-${CELL_ID}-debug-info-${timestamp}"
-  local debug_data_path="${VCAP_DATA_PATH}/${debug_info_dir}"
+  tar zcf ${output_path}.tar.gz -C ${output_path}/.. $(basename ${output_path})
 
-  mkdir -p ${debug_data_path}
+  send_event_to_datadog "${output_path}.tar.gz" "$cell_name" "$cell_id"
 
-  echo "$dstate_processes" > ${debug_data_path}/dstate-processes
-  get_app_data $debug_data_path
-  get_system_info $debug_data_path
-
-  pushd ${VCAP_DATA_PATH}
-    tar zcf ${debug_info_dir}.tar.gz ${debug_info_dir}
-  popd
-
-  send_event_to_datadog "${VCAP_DATA_PATH}/${debug_info_dir}.tar.gz"
-
-  rm -rf $debug_data_path
-}
-
-get_app_data() {
-  local debug_data_path=$1
-  /var/vcap/packages/badapps/bin/badapps | python -mjson.tool > "${debug_data_path}/applications.json"
-}
-
-get_system_info() {
-  local debug_data_path=$1
-
-  mpstat -P ALL > ${debug_data_path}/mpstat
-  vmstat > ${debug_data_path}/vmstat
-  dmesg > ${debug_data_path}/dmesg
-  sar > ${debug_data_path}/sar
-  sar -n DEV > ${debug_data_path}/sar-dev
-  iostat -xz > ${debug_data_path}/iostat
-  uptime > ${debug_data_path}/uptime
-  pidstat > ${debug_data_path}/pidstat
+  rm -rf $output_path
 }
 
 send_event_to_datadog() {
   local tar_path=$1
+  local cell_name=$2
+  local cell_id=$3
 
   /var/vcap/packages/laika/bin/laika --datadog-api-key=<%= p("grootfs-diagnostics.datadog_api_key") %>  \
     --datadog-app-key=<%= p("grootfs-diagnostics.datadog_app_key") %>  \
     --prefix=grootfs-diagnostics \
     --event-title="grootfs-diagnostics: d-state detected" \
-    --event-message="{\"cell_name\":\"${CELL_NAME}\",\"cell_id\":\"${CELL_ID}\",\"logs_path\":\"${tar_path}\"}" \
+    --event-message="{\"cell_name\":\"${cell_name}\",\"cell_id\":\"${cell_id}\",\"logs_path\":\"${tar_path}\"}" \
     --event-tag="grootfs-dstate"
 }

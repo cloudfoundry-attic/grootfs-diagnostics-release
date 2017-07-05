@@ -1,11 +1,17 @@
 #!/bin/bash
 
+set -e
+
 BIN_PATH=/var/vcap/jobs/grootfs-diagnostics/bin
 DATA_PATH=/var/vcap/data/grootfs-diagnostics
 TRACE_DAT=${DATA_PATH}/trace.dat
 RUN_PATH=/var/vcap/sys/run/grootfs-diagnostics
 LAST_RUN_PIDS=${RUN_PATH}/last_pids
 PID_FILE=${RUN_PATH}/grootfs-diagnostics.pid
+CELL_ID=$(cat /var/vcap/instance/id)
+CELL_NAME="$(cat /var/vcap/instance/name)"
+VCAP_DATA_PATH=/var/vcap/data/grootfs-diagnostics
+
 export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
 
 mkdir -p $DATA_PATH
@@ -20,6 +26,7 @@ source ${BIN_PATH}/no-action
 <% end %>
 
 source ${BIN_PATH}/report-dstate
+source ${BIN_PATH}/collect-data
 source ${BIN_PATH}/dstate-counter
 
 dstate_reported=false
@@ -38,17 +45,21 @@ main() {
 }
 
 report_dstate_processes() {
-  current_dstate=$(ps axho pid,state,comm | grep 'D')
   current_pids=$(ps axho pid,state | grep 'D' | cut -d D -f1)
   for pid in $current_pids
   do
     if grep $pid $LAST_RUN_PIDS > /dev/null
     then
 
+      local timestamp=$(date "+%d-%m-%y_%H-%M-%S")
+      local output_name="${CELL_NAME}-${CELL_ID}-debug-info-${timestamp}"
+      local output_path="${VCAP_DATA_PATH}/${output_name}"
+
       extract_trace_data
       ${dstate_reported} && return
 
-      collect_debug_info "$current_pids" "$current_dstate"
+      collect_debug_info "$output_path"
+      report_dstate "$output_path"
       dstate_reported=true
       break
 

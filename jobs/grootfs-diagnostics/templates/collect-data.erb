@@ -1,0 +1,32 @@
+#!/bin/bash
+
+collect_debug_info() {
+  local output_path=$1
+
+  mkdir -p ${output_path}
+
+  local dstate_processes=$(ps axho pid,state,comm | grep 'D')
+  local dstate_pids=$(ps axho pid,state | grep 'D' | cut -d D -f1)
+
+  echo "$dstate_processes" > ${output_path}/dstate-processes
+  get_app_data $output_path
+  get_system_info $output_path
+}
+
+get_app_data() {
+  local debug_data_path=$1
+  /var/vcap/packages/badapps/bin/badapps | python -mjson.tool > "${debug_data_path}/applications.json"
+}
+
+get_system_info() {
+  local debug_data_path=$1
+
+  mpstat -P ALL > ${debug_data_path}/mpstat
+  vmstat > ${debug_data_path}/vmstat
+  dmesg > ${debug_data_path}/dmesg
+  sar > ${debug_data_path}/sar
+  sar -n DEV > ${debug_data_path}/sar-dev
+  iostat -xz > ${debug_data_path}/iostat
+  uptime > ${debug_data_path}/uptime
+  pidstat > ${debug_data_path}/pidstat
+}
