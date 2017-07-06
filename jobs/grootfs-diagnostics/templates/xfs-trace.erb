@@ -1,6 +1,7 @@
 #!/bin/bash
 
 DATA_PATH=/var/vcap/data/grootfs-diagnostics
+TRACE_DAT=${DATA_PATH}/trace.dat
 export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
 
 start_trace() {
@@ -18,26 +19,21 @@ stop_trace() {
 }
 
 extract_trace_data() {
-  local output_path=$1
-  local trace_dat=${output_path}/trace.dat
-
   if max_trace_logs_reached; then
     echo "Max trace logs reached. Skipping extract trace data"
     return
   fi
 
   timestamp=$(date "+%d-%m-%y__%H-%M-%S")
-  trace-cmd extract -B grootfs-diagnostics -o $trace_dat
-  trace-cmd report -i $trace_dat > ${output_path}/trace.${timestamp}.log
-  rm -rf $trace_dat
-
-  gzip ${output_path}/trace.${timestamp}.log
-  touch ${DATA_PATH}/trace-created-${timestamp}
+  trace-cmd extract -B grootfs-diagnostics -o $TRACE_DAT
+  trace-cmd report -i $TRACE_DAT > $DATA_PATH/trace.${timestamp}.log
+  rm -rf $TRACE_DAT
+  gzip $DATA_PATH/trace.${timestamp}.log
 
   trace-cmd start -b <%= p("grootfs-diagnostics.tracing_buffer_size") %> -B grootfs-diagnostics -e <%= p("grootfs-diagnostics.tracing_event_glob") %>
 }
 
 max_trace_logs_reached() {
-  log_file_count=$(ls $DATA_PATH/trace-created-* 2> /dev/null | wc -l)
+  log_file_count=$(ls $DATA_PATH/trace.*.log.gz 2> /dev/null | wc -l)
   [ $log_file_count -ge <%= p("grootfs-diagnostics.tracing_max_log_files") %> ]
 }
