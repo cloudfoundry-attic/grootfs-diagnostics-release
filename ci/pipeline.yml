@@ -53,7 +53,7 @@ jobs:
             channel: "cf-grootfs"
             username: "Santa"
             icon_url: "https://media.giphy.com/media/vTn5ap94xD9nO/giphy.gif"
-            text: "<!subteam^S5YHYPBV4|grootfsteam> <!subteam^S5F6U0H7D|CloudOpsSF> D-STATE DETECTED -- https://concourse.lakitu.cf-app.com/teams/cf-grootfs/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME :red_circle: :red_circle: :red_circle: :red_circle:"
+            text: {{dstate-slack-alert-text}}
 
 resource_types:
   - name: datadog-event
