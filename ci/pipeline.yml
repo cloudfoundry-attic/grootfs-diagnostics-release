@@ -32,7 +32,7 @@ jobs:
         - get: grootfs-diagnostics-release
       - do:
         - task: collect-data
-          tags: [prod]
+          tags: [{{dstate-job-worker-tag}}]
           file: grootfs-diagnostics-release/ci/tasks/collect-data.yml
           privileged: true
           params:

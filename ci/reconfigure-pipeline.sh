@@ -33,6 +33,7 @@ set_pipeline_lakitu() {
     --var aws-secret-access-key="$(lpass show "Shared-Private-GrootFS/grootfs-diagnostics-pws-s3-user" --password)" \
     --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/pws-datadog-app-key' --password)" \
     --var bosh-deployment-name=cf-cfapps-io2-diego \
+    --var dstate-job-worker-tag=prod \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_bosh_secrets.yml \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_app_specific_configs.yml
 }
@@ -51,6 +52,7 @@ set_pipeline_grootfs() {
     --var aws-secret-access-key="$(lpass show "Shared-Private-GrootFS/grootfs-diagnostics-pws-s3-user" --password)" \
     --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --password)" \
     --var bosh-deployment-name=cf-cfapps-io2-diego \
+    --var dstate-job-worker-tag=thanos \
     --var prod_bosh_client_id="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --username)" \
     --var prod_bosh_client_secret="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --password)" \
     --var prod_bosh_ca_cert="$cert" \
