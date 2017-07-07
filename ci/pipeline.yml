@@ -1,6 +1,7 @@
 resources:
   - name: dstate-event
     type: datadog-event
+    check_every: 30s
     source:
       api_key: {{PROD_DATADOG_API_KEY}}
       application_key: {{datadog-application-key}}
