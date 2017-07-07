@@ -18,7 +18,7 @@ resources:
   - name: dstate-diagnostics-tarball
     type: s3
     source:
-      bucket: grootfs-dstate-reports
+      bucket: grootfs-diagnostics-pws
       regexp: "(.*).tar.gz"
       access_key_id: {{aws-access-key-id}}
       secret_access_key: {{aws-secret-access-key}}

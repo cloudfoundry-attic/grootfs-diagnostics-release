@@ -29,8 +29,8 @@ set_pipeline_lakitu() {
   fly --target="$flyrc_target" set-pipeline --pipeline=$pipeline_name \
     --config=ci/${pipeline_file} \
     --var slack-alert-url="$(lpass show 'Shared-Garden/grootfs-pivotal-slack-hook' --url)" \
-    --var aws-access-key-id="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --username)" \
-    --var aws-secret-access-key="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --password)" \
+    --var aws-access-key-id="$(lpass show "Shared-Private-GrootFS/grootfs-diagnostics-pws-s3-user" --username)" \
+    --var aws-secret-access-key="$(lpass show "Shared-Private-GrootFS/grootfs-diagnostics-pws-s3-user" --password)" \
     --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/pws-datadog-app-key' --password)" \
     --var bosh-deployment-name=cf-cfapps-io2-diego \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_bosh_secrets.yml \
@@ -47,8 +47,8 @@ set_pipeline_grootfs() {
   fly --target="$flyrc_target" set-pipeline --pipeline=$pipeline_name \
     --config=ci/${pipeline_file} \
     --var slack-alert-url="$(lpass show 'Shared-Garden/grootfs-pivotal-slack-hook' --url)" \
-    --var aws-access-key-id="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --username)" \
-    --var aws-secret-access-key="$(lpass show "Shared-Garden/grootfs-deployments/grootfs-dstate-reports-s3-user" --password)" \
+    --var aws-access-key-id="$(lpass show "Shared-Private-GrootFS/grootfs-diagnostics-pws-s3-user" --username)" \
+    --var aws-secret-access-key="$(lpass show "Shared-Private-GrootFS/grootfs-diagnostics-pws-s3-user" --password)" \
     --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --password)" \
     --var bosh-deployment-name=cf-cfapps-io2-diego \
     --var prod_bosh_client_id="$(lpass show 'Shared-Garden/grootfs-deployments\thanos/bosh-director' --username)" \
