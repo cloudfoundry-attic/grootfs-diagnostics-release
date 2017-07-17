@@ -3,8 +3,6 @@ name: grootfs-diagnostics
 
 templates:
   diagnostics_ctl.erb: bin/diagnostics_ctl
-  run.erb: bin/run
-  no-action.erb: bin/no-action
   dstate-counter.erb: bin/dstate-counter
   xfs-trace.erb: bin/xfs-trace
   report-dstate.erb: bin/report-dstate
@@ -14,6 +12,7 @@ packages:
   - badapps
   - laika
   - metatron
+  - showmewhatyougot
 
 properties:
   grootfs-diagnostics.tracing_enabled:
@@ -28,9 +27,12 @@ properties:
   grootfs-diagnostics.tracing_max_log_files:
     description: "number of trace logs to keep. when number is met trace reporting will stop"
     default: 10
-  grootfs-diagnostics.interval:
-    description: "time in seconds before a process in D state is considered stale"
-    default: 150
+  grootfs-diagnostics.polling_interval:
+    description: "time to wait between process state checks"
+    default: 10s
+  grootfs-diagnostics.alert_interval_threshold:
+    description: "number of failing process state checks before an alert is raised"
+    default: 15
   grootfs-diagnostics.datadog_api_key:
     description: "api key to send dstate events to datadog"
   grootfs-diagnostics.datadog_app_key:

@@ -6,7 +6,7 @@ TRACE_DAT=${DATA_PATH}/trace.dat
 RUN_PATH=/var/vcap/sys/run/grootfs-diagnostics
 LOG_PATH=/var/vcap/sys/log/grootfs-diagnostics
 PID_FILE=${RUN_PATH}/grootfs-diagnostics.pid
-export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
+export PATH=/var/vcap/packages/showmewhatyougot/bin:$PATH
 
 mkdir -p $DATA_PATH
 mkdir -p $RUN_PATH
@@ -15,7 +15,15 @@ mkdir -p $LOG_PATH
 case $1 in
 
   start)
-    ${BIN_PATH}/run > $LOG_PATH/diagnostics_ctl.stdout.log 2> $LOG_PATH/diagnostics_ctl.stderr.log
+    showmewhatyougot -state=D \
+          -polling-interval=<%= p('grootfs-diagnostics.polling_interval') %> \
+          -alert-interval-threshold=<%= p('grootfs-diagnostics.alert_interval_threshold') %> \
+          <% if p('grootfs-diagnostics.tracing_enabled') %> -tracing-enabled <% end %>\
+          -process-state-counter="${BIN_PATH}/dstate-counter" \
+          -xfs-trace-path="${BIN_PATH}/xfs-trace" \
+          -process-state-reporter="${BIN_PATH}/report-dstate" \
+          -pid-file-path=$PID_FILE \
+      > $LOG_PATH/diagnostics_ctl.stdout.log 2> $LOG_PATH/diagnostics_ctl.stderr.log
 
     ;;
 
@@ -23,7 +31,6 @@ case $1 in
     if [[ -f "$PID_FILE" ]]
     then
       kill $(cat $PID_FILE)
-      trace-cmd stop
       rm $PID_FILE
     fi
 

@@ -4,6 +4,22 @@ DATA_PATH=/var/vcap/data/grootfs-diagnostics
 TRACE_DAT=${DATA_PATH}/trace.dat
 export PATH=/var/vcap/packages/trace-cmd/bin:$PATH
 
+main() {
+  case $1 in
+    start)
+      start_trace
+      ;;
+
+    stop)
+      stop_trace
+      ;;
+
+    extract)
+      extract_trace_data
+      ;;
+  esac
+}
+
 start_trace() {
   if max_trace_logs_reached; then
     echo "Max trace logs reached. Skipping start trace"
@@ -37,3 +53,5 @@ max_trace_logs_reached() {
   log_file_count=$(ls $DATA_PATH/trace.*.log.gz 2> /dev/null | wc -l)
   [ $log_file_count -ge <%= p("grootfs-diagnostics.tracing_max_log_files") %> ]
 }
+
+main "$1"
