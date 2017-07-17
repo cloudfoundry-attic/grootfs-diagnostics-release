@@ -37,8 +37,6 @@ get_system_info() {
   mpstat -P ALL > ${debug_data_path}/mpstat
   vmstat > ${debug_data_path}/vmstat
   dmesg > ${debug_data_path}/dmesg
-  sar > ${debug_data_path}/sar
-  sar -n DEV > ${debug_data_path}/sar-dev
   iostat -xz > ${debug_data_path}/iostat
   uptime > ${debug_data_path}/uptime
   pidstat > ${debug_data_path}/pidstat
@@ -54,3 +52,5 @@ send_event_to_datadog() {
     --event-message="{\"cell_name\":\"${CELL_NAME}\",\"cell_id\":\"${CELL_ID}\",\"logs_path\":\"${tar_path}\"}" \
     --event-tag="grootfs-dstate"
 }
+
+collect_debug_info "$1" "$2"
