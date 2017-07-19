@@ -34,8 +34,8 @@ set_pipeline_lakitu() {
     --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/pws-datadog-app-key' --password)" \
     --var bosh-deployment-name=cf-cfapps-io2-diego \
     --var dstate-job-worker-tag=prod \
-    --var dstate-slack-alert-text='<!subteam^S5YHYPBV4|grootfsteam> D-STATE DETECTED -- https://concourse.lakitu.cf-app.com/teams/cf-grootfs/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME :red_circle: :red_circle: :red_circle: :red_circle:' \
     --var dstate-slack-alert-channel=cf-grootfs-internal \
+    --var dstate-slack-alert-text='D-STATE DETECTED -- https://concourse.lakitu.cf-app.com/teams/cf-grootfs/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME :red_circle: :red_circle: :red_circle: :red_circle:' \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_bosh_secrets.yml \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_app_specific_configs.yml
 }
