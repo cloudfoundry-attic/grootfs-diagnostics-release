@@ -1,0 +1,15 @@
+---
+image_resource:
+  type: docker-image
+  source:
+    repository: cfgarden/grootfs-ci
+    tag: latest
+
+platform: linux
+
+inputs:
+  - name: grootfs-diagnostics-develop
+
+run:
+  path: grootfs-diagnostics-develop/ci/scripts/test.sh
+  user: root
