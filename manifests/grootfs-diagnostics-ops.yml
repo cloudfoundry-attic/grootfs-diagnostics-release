@@ -12,6 +12,7 @@
     properties:
       grootfs-diagnostics:
         tracing_enabled: false
-        interval: 150
-        datadog_api_key: {{datadog_api_key}}
-        datadog_app_key: {{datadog_app_key}}
+        polling_interval: 10s
+        alert_interval_threshold: 15
+        datadog_api_key: ((datadog_api_key))
+        datadog_app_key: ((datadog_app_key))
