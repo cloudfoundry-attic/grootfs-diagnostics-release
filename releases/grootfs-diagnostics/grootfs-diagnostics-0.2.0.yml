@@ -1,0 +1,48 @@
+name: grootfs-diagnostics
+version: 0.2.0
+commit_hash: 599b9a4
+uncommitted_changes: false
+jobs:
+- name: grootfs-diagnostics
+  version: 417f3fdfa9e838dfffc8445b56fffbbe9b7c44e0
+  fingerprint: 417f3fdfa9e838dfffc8445b56fffbbe9b7c44e0
+  sha1: 7cadd6cd665035534eabdbd299f6ea6c8c3e4d08
+packages:
+- name: badapps
+  version: 2c36967577451617493a2b045c78fd451c308876
+  fingerprint: 2c36967577451617493a2b045c78fd451c308876
+  sha1: 76377ed3edba991d5bca43dbcbb48355725675d3
+  dependencies:
+  - golang
+- name: golang
+  version: 445953f0cacfa62eadbcd6789a1727fb4922ec0b
+  fingerprint: 445953f0cacfa62eadbcd6789a1727fb4922ec0b
+  sha1: 55a744393329115bd24f9dc3cb2b18b8c0b337a1
+  dependencies: []
+- name: laika
+  version: f3a3a68cbd55e8cbda4bb1458b0260062100a6c4
+  fingerprint: f3a3a68cbd55e8cbda4bb1458b0260062100a6c4
+  sha1: 32cd344e7e5045b297df38eda52f4b65b57bbb3c
+  dependencies:
+  - golang
+- name: metatron
+  version: 5bf008c893f6e594b8e181c352ab3d898e184a31
+  fingerprint: 5bf008c893f6e594b8e181c352ab3d898e184a31
+  sha1: 20d71e4170229f71351ca6558c3502bdd3d129a7
+  dependencies:
+  - golang
+- name: showmewhatyougot
+  version: bb87f26eac557f2dc3efe071f06daa9eb1ea14e8
+  fingerprint: bb87f26eac557f2dc3efe071f06daa9eb1ea14e8
+  sha1: 55392329cf650218a276673637198ca2e55a5a60
+  dependencies:
+  - golang
+- name: trace-cmd
+  version: 6ad2213711af9b83ede1d3c38ad1e2e0170b2cbb
+  fingerprint: 6ad2213711af9b83ede1d3c38ad1e2e0170b2cbb
+  sha1: 76169610682b66de468a2762109ec2482fe49695
+  dependencies: []
+license:
+  version: 87d145fce82453899f1423419521938ef7a25e2e
+  fingerprint: 87d145fce82453899f1423419521938ef7a25e2e
+  sha1: 2001ade248b97f4f3a9621205ba55a5911eaf479
