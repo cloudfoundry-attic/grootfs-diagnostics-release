@@ -50,7 +50,7 @@ jobs:
         ensure:
           put: slack-alert
           params:
-            channel: "cf-grootfs"
+            channel: {{dstate-slack-alert-channel}}
             username: "Santa"
             icon_url: "https://media.giphy.com/media/vTn5ap94xD9nO/giphy.gif"
             text: {{dstate-slack-alert-text}}
