@@ -1,7 +1,7 @@
-golang/go1.8.1.linux-amd64.tar.gz:
-  size: 91277742
-  object_id: 8d6e21b8-148c-46a4-6526-5bade0bd465a
-  sha: a433f76c569055ff8536d796995518dd91a9fa5b
+golang/go1.8.3.linux-amd64.tar.gz:
+  size: 90029041
+  object_id: 81cbb973-cb3b-471e-574f-c8420992e94f
+  sha: 838c415896ef5ecd395dfabde5e7e6f8ac943c8e
 trace-cmd/trace-cmd-v2.6.1.tar.gz:
   size: 1860029
   object_id: fd04b287-1f0a-40df-6e8b-7acd2aa05db6
