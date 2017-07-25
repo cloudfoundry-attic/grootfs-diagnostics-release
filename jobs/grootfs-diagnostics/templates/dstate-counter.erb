@@ -1,8 +1,8 @@
 #!/bin/bash
 
-dstate_counter() {
+report_dstate_count() {
   currenttime=$(date +%s)
-  count=$(ps axho state | grep 'D' | wc -l)
+  count=$1
 
   echo "${currenttime}: Total D-State processes: ${count}"
 
@@ -12,4 +12,4 @@ dstate_counter() {
     --value=$count
 }
 
-dstate_counter
+report_dstate_count "$1"
