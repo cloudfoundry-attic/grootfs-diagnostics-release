@@ -30,6 +30,9 @@ properties:
   grootfs-diagnostics.polling_interval:
     description: "time to wait between process state checks"
     default: 10s
+  grootfs-diagnostics.reporter_backoff_duration:
+    description: "reporting is restricted to one report per backoff duration"
+    default: 10m
   grootfs-diagnostics.alert_interval_threshold:
     description: "number of failing process state checks before an alert is raised"
     default: 15

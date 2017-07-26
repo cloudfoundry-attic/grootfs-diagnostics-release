@@ -20,6 +20,7 @@ jobs:
     properties:
       grootfs-diagnostics:
         polling_interval: 1s
+        reporter_backoff_duration: 1s
         tracing_enabled: true
         alert_interval_threshold: 2
         datadog_api_key: "aaaa"

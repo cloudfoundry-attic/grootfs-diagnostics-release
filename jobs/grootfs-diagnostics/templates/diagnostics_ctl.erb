@@ -17,6 +17,7 @@ case $1 in
   start)
     showmewhatyougot -state=D \
           -polling-interval=<%= p('grootfs-diagnostics.polling_interval') %> \
+          -reporter-backoff-duration=<%= p('grootfs-diagnostics.reporter_backoff_duration') %> \
           -alert-interval-threshold=<%= p('grootfs-diagnostics.alert_interval_threshold') %> \
           <% if p('grootfs-diagnostics.tracing_enabled') %> -tracing-enabled <% end %>\
           -process-state-counter="${BIN_PATH}/dstate-counter" \
