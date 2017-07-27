@@ -52,7 +52,7 @@ jobs:
           params:
             channel: {{dstate-slack-alert-channel}}
             username: "Santa"
-            icon_url: "https://media.giphy.com/media/vTn5ap94xD9nO/giphy.gif"
+            icon_url: {{dstate-slack-alert-icon}}
             text: {{dstate-slack-alert-text}}
 
 resource_types:

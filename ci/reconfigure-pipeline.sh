@@ -35,7 +35,8 @@ set_pipeline_lakitu() {
     --var bosh-deployment-name=cf-cfapps-io2-diego \
     --var dstate-job-worker-tag=prod \
     --var dstate-slack-alert-channel=cf-grootfs-internal \
-    --var dstate-slack-alert-text='D-STATE DETECTED -- https://concourse.lakitu.cf-app.com/teams/cf-grootfs/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME :red_circle: :red_circle: :red_circle: :red_circle:' \
+    --var dstate-slack-alert-icon='https://media.giphy.com/media/vTn5ap94xD9nO/giphy.gif' \
+    --var dstate-slack-alert-text='D-STATE DETECTED IN PWS -- https://concourse.lakitu.cf-app.com/teams/cf-grootfs/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME :red_circle: :red_circle: :red_circle: :red_circle:' \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_bosh_secrets.yml \
     --load-vars-from $HOME/workspace/secrets-prod/ci/ci_app_specific_configs.yml
 }
@@ -49,7 +50,7 @@ set_pipeline_grootfs() {
 
   fly --target="$flyrc_target" set-pipeline --pipeline=$pipeline_name \
     --config=ci/${pipeline_file} \
-    --var slack-alert-url="$(lpass show 'Shared-Garden/grootfs-pivotal-slack-hook' --url)" \
+    --var slack-alert-url="$(lpass show 'Shared-Garden/grootfs-cloudfoundry-slack-hook' --url)" \
     --var aws-access-key-id="$(lpass show "Shared-Private-GrootFS/grootfs-diagnostics-pws-s3-user" --username)" \
     --var aws-secret-access-key="$(lpass show "Shared-Private-GrootFS/grootfs-diagnostics-pws-s3-user" --password)" \
     --var datadog-application-key="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --password)" \
@@ -61,8 +62,9 @@ set_pipeline_grootfs() {
     --var prod_bosh_target="https://10.0.0.6" \
     --var PROD_DATADOG_API_KEY="$(lpass show 'Shared-Garden/grootfs-deployments/datadog-api-keys' --username)" \
     --var bosh-deployment-name="cf" \
-    --var dstate-slack-alert-channel=cf-grootfs \
-    --var dstate-slack-alert-text="Testing! No D-State processes here! Fake news!"
+    --var dstate-slack-alert-channel=grootfs \
+    --var dstate-slack-alert-icon='https://pbs.twimg.com/profile_images/701222507756453888/ECaLTXUb.jpg' \
+    --var dstate-slack-alert-text='<!subteam^S1U0HSJ9E|grootfsteam>: EXPERIMENT - D-state detected in Thanos -- https://grootfs.ci.cf-app.com/teams/main/pipelines/$BUILD_PIPELINE_NAME/jobs/$BUILD_JOB_NAME/builds/$BUILD_NAME'
 }
 
 expose_pipeline() {
