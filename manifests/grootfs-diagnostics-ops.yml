@@ -14,6 +14,6 @@
         tracing_enabled: false
         polling_interval: 10s
         reporter_backoff_duration: 10m
-        alert_interval_threshold: 15
+        alert_interval_threshold: 18
         datadog_api_key: ((datadog_api_key))
         datadog_app_key: ((datadog_app_key))
