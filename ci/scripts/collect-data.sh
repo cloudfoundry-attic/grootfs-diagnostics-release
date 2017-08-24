@@ -9,7 +9,7 @@ TAR_PATH=$(echo $dstate_json | jq -r '.logs_path')
 echo "$BOSH_CA_CERT" > ca_cert.crt
 
 echo "Running performance tests..."
-bosh2 -e $BOSH_TARGET --ca-cert ca_cert.crt alias-env bosh-director
-bosh2 -e bosh-director --client $BOSH_CLIENT --client-secret $BOSH_CLIENT_SECRET login
+bosh -e $BOSH_TARGET --ca-cert ca_cert.crt alias-env bosh-director
+bosh -e bosh-director --client $BOSH_CLIENT --client-secret $BOSH_CLIENT_SECRET login
 
-bosh2 -e bosh-director -d $BOSH_DEPLOYMENT scp $CELL_NAME/$CELL_ID:$TAR_PATH diagnostics
+bosh -e bosh-director -d $BOSH_DEPLOYMENT scp $CELL_NAME/$CELL_ID:$TAR_PATH diagnostics
