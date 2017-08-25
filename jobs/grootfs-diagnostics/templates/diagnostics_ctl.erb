@@ -24,6 +24,7 @@ case $1 in
           -xfs-trace-path="${BIN_PATH}/xfs-trace" \
           -process-state-reporter="${BIN_PATH}/report-dstate" \
           -pid-file-path=$PID_FILE \
+          -commands-timeout=<%= p('grootfs-diagnostics.commands_timeout') %> \
       > $LOG_PATH/diagnostics_ctl.stdout.log 2> $LOG_PATH/diagnostics_ctl.stderr.log
 
     ;;

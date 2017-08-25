@@ -36,6 +36,9 @@ properties:
   grootfs-diagnostics.alert_interval_threshold:
     description: "number of failing process state checks before an alert is raised"
     default: 15
+  grootfs-diagnostics.commands_timeout:
+    description: "maximum time to wait for an invoked process to return before continuing"
+    default: 15s
   grootfs-diagnostics.datadog_api_key:
     description: "api key to send dstate events to datadog"
   grootfs-diagnostics.datadog_app_key:

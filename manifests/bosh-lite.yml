@@ -25,6 +25,7 @@ jobs:
         alert_interval_threshold: 2
         datadog_api_key: "aaaa"
         datadog_app_key: "bbbb"
+        commands_timeout: 15s
 
 networks:
   - name: grootfs
