@@ -8,7 +8,7 @@ mkdir -p ${BOSH_INSTALL_TARGET}/src
 cp -ra * ${BOSH_INSTALL_TARGET}/src
 
 mkdir ${BOSH_INSTALL_TARGET}/bin
-pushd ${BOSH_INSTALL_TARGET}/src/github.com/masters-of-cats/showmewhatyougot
+pushd ${BOSH_INSTALL_TARGET}/src/code.cloudfoundry.org/showmewhatyougot
   go build .
   mv showmewhatyougot ${BOSH_INSTALL_TARGET}/bin
 popd

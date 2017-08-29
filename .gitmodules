@@ -7,6 +7,6 @@
 [submodule "src/github.com/masters-of-cats/metatron"]
 	path = src/github.com/masters-of-cats/metatron
 	url = http://github.com/masters-of-cats/metatron.git
-[submodule "src/github.com/masters-of-cats/showmewhatyougot"]
-	path = src/github.com/masters-of-cats/showmewhatyougot
-	url = http://github.com/masters-of-cats/showmewhatyougot.git
+[submodule "src/code.cloudfoundry.org/showmewhatyougot"]
+	path = src/code.cloudfoundry.org/showmewhatyougot
+	url = git@github.com:cloudfoundry/showmewhatyougot
