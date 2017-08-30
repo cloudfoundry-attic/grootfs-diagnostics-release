@@ -1,5 +1,5 @@
 set -e
 
-tar xvzf golang/go1.8.3.linux-amd64.tar.gz
+tar xvzf golang/go1.9.linux-amd64.tar.gz
 cp -R go/* ${BOSH_INSTALL_TARGET}
 
