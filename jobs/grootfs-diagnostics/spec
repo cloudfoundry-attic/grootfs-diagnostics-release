@@ -3,9 +3,10 @@ name: grootfs-diagnostics
 
 templates:
   diagnostics_ctl.erb: bin/diagnostics_ctl
-  dstate-counter.erb: bin/dstate-counter
+  dstate-count-reporter.erb: bin/dstate-count-reporter
   xfs-trace.erb: bin/xfs-trace
-  report-dstate.erb: bin/report-dstate
+  collect-debug-data.erb: bin/collect-debug-data
+  event-emitter.erb: bin/event-emitter
 
 packages:
   - trace-cmd

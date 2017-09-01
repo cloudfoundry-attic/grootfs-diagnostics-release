@@ -2,6 +2,7 @@
 
 BIN_PATH=/var/vcap/jobs/grootfs-diagnostics/bin
 DATA_PATH=/var/vcap/data/grootfs-diagnostics
+INSTANCE_INFO_PATH=/var/vcap/instance
 TRACE_DAT=${DATA_PATH}/trace.dat
 RUN_PATH=/var/vcap/sys/run/grootfs-diagnostics
 LOG_PATH=/var/vcap/sys/log/grootfs-diagnostics
@@ -19,12 +20,15 @@ case $1 in
           -polling-interval=<%= p('grootfs-diagnostics.polling_interval') %> \
           -reporter-backoff-duration=<%= p('grootfs-diagnostics.reporter_backoff_duration') %> \
           -alert-interval-threshold=<%= p('grootfs-diagnostics.alert_interval_threshold') %> \
-          <% if p('grootfs-diagnostics.tracing_enabled') %> -tracing-enabled <% end %>\
-          -process-state-counter="${BIN_PATH}/dstate-counter" \
+          <% if p('grootfs-diagnostics.tracing_enabled') %>-tracing-enabled <% end %>\
+          -state-count-reporter-path="${BIN_PATH}/dstate-count-reporter" \
+          -data-collector-path="${BIN_PATH}/collect-debug-data" \
+          -event-emitter-path="${BIN_PATH}/event-emitter" \
           -xfs-trace-path="${BIN_PATH}/xfs-trace" \
-          -process-state-reporter="${BIN_PATH}/report-dstate" \
-          -pid-file-path=$PID_FILE \
           -commands-timeout=<%= p('grootfs-diagnostics.commands_timeout') %> \
+          -data-path="${DATA_PATH}" \
+          -instance-info-path="${INSTANCE_INFO_PATH}" \
+          -pid-file-path="${PID_FILE}" \
       > $LOG_PATH/diagnostics_ctl.stdout.log 2> $LOG_PATH/diagnostics_ctl.stderr.log
 
     ;;

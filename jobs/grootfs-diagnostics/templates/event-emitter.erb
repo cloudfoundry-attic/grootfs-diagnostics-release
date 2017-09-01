@@ -1,0 +1,17 @@
+#!/bin/bash
+
+CELL_ID=$(cat /var/vcap/instance/id)
+CELL_NAME="$(cat /var/vcap/instance/name)"
+
+send_event_to_datadog() {
+  local tar_path=$1
+
+  /var/vcap/packages/laika/bin/laika --datadog-api-key=<%= p("grootfs-diagnostics.datadog_api_key") %>  \
+    --datadog-app-key=<%= p("grootfs-diagnostics.datadog_app_key") %>  \
+    --prefix=grootfs-diagnostics \
+    --event-title="grootfs-diagnostics: d-state detected" \
+    --event-message="{\"cell_name\":\"${CELL_NAME}\",\"cell_id\":\"${CELL_ID}\",\"logs_path\":\"${tar_path}\"}" \
+    --event-tag="grootfs-dstate"
+}
+
+send_event_to_datadog "$1"
