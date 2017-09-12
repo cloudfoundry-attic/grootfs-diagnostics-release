@@ -1,23 +1,14 @@
 #!/bin/bash
 
 collect_debug_info() {
-  local dstate_pids=$1
-  local dstate_processes=$2
-  local debug_data_path=$3
+  local debug_data_path=$1
   local debug_data_tarball_path="${debug_data_path}.tar.gz"
 
-  echo "$dstate_processes" > ${debug_data_path}/dstate-processes
-  get_app_data $debug_data_path
   get_system_info $debug_data_path
 
-  tar zcf ${debug_data_tarball_path} ${debug_data_path}
+  tar -C "$(dirname ${debug_data_path})" -zcf ${debug_data_tarball_path} "$(basename ${debug_data_path})"
 
-  echo -n "${debug_data_tarball_path}"
-}
-
-get_app_data() {
-  local debug_data_path=$1
-  /var/vcap/packages/badapps/bin/badapps | python -mjson.tool > "${debug_data_path}/applications.json"
+  echo "${debug_data_tarball_path}"
 }
 
 get_system_info() {
@@ -31,4 +22,4 @@ get_system_info() {
   pidstat > ${debug_data_path}/pidstat
 }
 
-collect_debug_info "$1" "$2" "$3"
+collect_debug_info "$1"

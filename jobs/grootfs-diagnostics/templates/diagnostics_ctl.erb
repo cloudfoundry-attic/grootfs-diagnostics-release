@@ -23,6 +23,7 @@ case $1 in
           <% if p('grootfs-diagnostics.tracing_enabled') %>-tracing-enabled <% end %>\
           -state-count-reporter-path="${BIN_PATH}/dstate-count-reporter" \
           -data-collector-path="${BIN_PATH}/collect-debug-data" \
+          -app-collector-path=/var/vcap/packages/badapps/bin/badapps \
           -event-emitter-path="${BIN_PATH}/event-emitter" \
           -xfs-trace-path="${BIN_PATH}/xfs-trace" \
           -commands-timeout=<%= p('grootfs-diagnostics.commands_timeout') %> \
