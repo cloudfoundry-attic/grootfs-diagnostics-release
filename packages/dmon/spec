@@ -1,0 +1,8 @@
+---
+name: dmon
+
+dependencies:
+- golang
+
+files:
+- dmon/**/*

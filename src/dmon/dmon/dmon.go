@@ -34,7 +34,7 @@ func (d *Dmon) CheckFilesystemAvailability(logger lager.Logger, dirToCheck strin
 	errs := func(err error, msg string, data lager.Data) error {
 		logger.Error(msg, err, data)
 		if eventErr := d.EventEmitter.EmitEvent(); eventErr != nil {
-			logger.Error("emitting-event", err)
+			logger.Error("emitting-event", eventErr)
 		}
 		return errors.Wrap(err, msg)
 	}

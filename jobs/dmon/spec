@@ -1,0 +1,20 @@
+# vi:syntax=yaml
+---
+name: dmon
+
+templates:
+  dmon_ctl.sh.erb: bin/dmon_ctl.sh
+
+packages:
+- dmon
+
+properties:
+  dmon.metron_endpoint:
+    description: "Metron endpoint."
+
+  dmon.dir_to_check:
+    description: "Tries to create a file under this directory, to check filesystem availability."
+
+  dmon.check_interval_seconds:
+    default: 600
+    description: "Seconds between filesystem checks."

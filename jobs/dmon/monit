@@ -1,0 +1,5 @@
+check process dmon
+  with pidfile /var/vcap/sys/run/dmon/dmon.pid
+  start program = "/var/vcap/jobs/dmon/bin/dmon_ctl.sh start"
+  stop program = "/var/vcap/jobs/dmon/bin/dmon_ctl.sh stop"
+  group vcap

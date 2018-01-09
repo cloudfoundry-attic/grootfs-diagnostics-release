@@ -1,0 +1,41 @@
+#!/bin/bash
+set -euo pipefail
+
+RUN_PATH=/var/vcap/sys/run/dmon
+LOG_PATH=/var/vcap/sys/log/dmon
+PID_FILE=${RUN_PATH}/dmon.pid
+
+mkdir -p $RUN_PATH
+mkdir -p $LOG_PATH
+
+case $1 in
+
+  start)
+    echo "$$" > "$PID_FILE"
+    while true; do
+      # We don't bother killing dmon instances, as they will exit within 10s.
+      /var/vcap/packages/dmon/bin/dmon \
+        --metron-endpoint "<%= p('dmon.metron_endpoint') %>" \
+        "<%= p('dmon.dir_to_check') %>" \
+        >> "$LOG_PATH"/dmon.stdout.log 2>> "$LOG_PATH"/dmon.stderr.log
+
+      sleep "<%= p('dmon.check_interval_seconds') %>"
+    done
+    ;;
+
+  stop)
+    if [[ -f "$PID_FILE" ]]
+    then
+      kill $(cat $PID_FILE)
+      rm $PID_FILE
+    fi
+
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop}"
+
+    ;;
+
+esac
+

@@ -1,0 +1,9 @@
+set -e
+
+export GOPATH=$PWD
+mkdir src
+cp -R dmon src/
+/var/vcap/packages/golang/bin/go install dmon
+
+mkdir ${BOSH_INSTALL_TARGET}/bin
+mv ./bin/dmon ${BOSH_INSTALL_TARGET}/bin
