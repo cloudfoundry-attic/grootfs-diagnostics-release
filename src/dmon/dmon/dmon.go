@@ -28,6 +28,9 @@ type ProcessManager interface {
 
 func (d *Dmon) CheckFilesystemAvailability(logger lager.Logger, dirToCheck string, writeTimeout time.Duration) error {
 	logger = logger.Session("checking-fs-availability", lager.Data{"dir_to_check": dirToCheck})
+	logger.Info("starting")
+	defer logger.Info("finished")
+
 	errs := func(err error, msg string, data lager.Data) error {
 		logger.Error(msg, err, data)
 		if eventErr := d.EventEmitter.EmitEvent(); eventErr != nil {
