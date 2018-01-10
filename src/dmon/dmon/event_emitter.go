@@ -3,9 +3,9 @@ package dmon
 import (
 	"fmt"
 
-	"code.cloudfoundry.org/dropsonde"
-	"code.cloudfoundry.org/dropsonde/envelopes"
 	"code.cloudfoundry.org/lager"
+	"github.com/cloudfoundry/dropsonde"
+	"github.com/cloudfoundry/dropsonde/envelopes"
 	"github.com/cloudfoundry/sonde-go/events"
 )
 
@@ -31,9 +31,11 @@ func (e *MetronEventEmitter) EmitEvent() error {
 	}
 
 	message := fmt.Sprintf("Filesystem containing %s unavailable", e.DirToCheck)
+	arbitrary := int32(1)
 
 	errorEvent := events.Error{
 		Source:  &source,
+		Code:    &arbitrary,
 		Message: &message,
 	}
 

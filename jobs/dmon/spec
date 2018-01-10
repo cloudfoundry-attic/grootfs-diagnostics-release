@@ -16,5 +16,5 @@ properties:
     description: "Tries to create a file under this directory, to check filesystem availability."
 
   dmon.check_interval_seconds:
-    default: 600
+    default: 300
     description: "Seconds between filesystem checks."
