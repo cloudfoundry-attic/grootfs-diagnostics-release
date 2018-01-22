@@ -16,6 +16,7 @@ import (
 var _ = Describe("Dmon", func() {
 	var (
 		eventEmitter   *dmonfakes.FakeEventEmitter
+		dataCollector  *dmonfakes.FakeDataCollector
 		processManager *dmonfakes.FakeProcessManager
 		dirToCheck     = "/some/dir"
 		logger         lager.Logger
@@ -26,6 +27,7 @@ var _ = Describe("Dmon", func() {
 
 	BeforeEach(func() {
 		eventEmitter = new(dmonfakes.FakeEventEmitter)
+		dataCollector = new(dmonfakes.FakeDataCollector)
 
 		processManager = new(dmonfakes.FakeProcessManager)
 		processManager.SpawnProcessReturns(4, nil)
@@ -35,6 +37,7 @@ var _ = Describe("Dmon", func() {
 
 		d = &dmon.Dmon{
 			EventEmitter:   eventEmitter,
+			DataCollector:  dataCollector,
 			ProcessManager: processManager,
 		}
 	})
@@ -58,6 +61,10 @@ var _ = Describe("Dmon", func() {
 
 		It("does not emit an event", func() {
 			Expect(eventEmitter.EmitEventCallCount()).To(Equal(0))
+		})
+
+		It("does not collect any data", func() {
+			Expect(dataCollector.CollectDataCallCount()).To(Equal(0))
 		})
 	})
 
@@ -86,6 +93,10 @@ var _ = Describe("Dmon", func() {
 			})
 
 			itEmitsEventAndReturnsError("spawn-err")
+
+			It("does not collect data", func() {
+				Expect(dataCollector.CollectDataCallCount()).To(Equal(0))
+			})
 		})
 
 		Context("when the process exits with a non-zero exit code", func() {
@@ -94,6 +105,10 @@ var _ = Describe("Dmon", func() {
 			})
 
 			itEmitsEventAndReturnsError("process-exited-non-zero")
+
+			It("does not collect data", func() {
+				Expect(dataCollector.CollectDataCallCount()).To(Equal(0))
+			})
 		})
 
 		Context("when the process cannot be waited for", func() {
@@ -102,6 +117,10 @@ var _ = Describe("Dmon", func() {
 			})
 
 			itEmitsEventAndReturnsError("wait-err")
+
+			It("does not collect data", func() {
+				Expect(dataCollector.CollectDataCallCount()).To(Equal(0))
+			})
 		})
 
 		Context("when the process has not exited when the timeout is reached", func() {
@@ -114,6 +133,10 @@ var _ = Describe("Dmon", func() {
 			})
 
 			itEmitsEventAndReturnsError("timed out")
+
+			It("collects data", func() {
+				Expect(dataCollector.CollectDataCallCount()).To(Equal(1))
+			})
 		})
 	})
 })

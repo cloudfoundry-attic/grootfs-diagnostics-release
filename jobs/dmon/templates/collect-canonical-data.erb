@@ -1,0 +1,17 @@
+#!/bin/bash
+
+collect_canonical_debug_info() {
+  local tarball_path=$1
+  send_system_requests
+
+  tar -C /var/log -zcf ${tarball_path} {kern.log,syslog}
+
+  echo "${tarball_path}"
+}
+
+send_system_requests() {
+  echo t | tee /proc/sysrq-trigger
+  echo l | tee /proc/sysrq-trigger
+}
+
+collect_canonical_debug_info "$1"

@@ -12,10 +12,15 @@ case $1 in
 
   start)
     echo "$$" > "$PID_FILE"
+
+    [[ ! -z "<%= p('dmon.debug_data_dir') %>" ]] && mkdir -p "<%= p('dmon.debug_data_dir') %>"
+
     while true; do
       # We don't bother killing dmon instances, as they will exit within 10s.
       /var/vcap/packages/dmon/bin/dmon \
         --metron-endpoint "<%= p('dmon.metron_endpoint') %>" \
+        --debug-program "/var/vcap/jobs/dmon/bin/collect-canonical-data" \
+        --debug-data-dir "<%= p('dmon.debug_data_dir') %>" \
         "<%= p('dmon.dir_to_check') %>" \
         >> "$LOG_PATH"/dmon.stdout.log 2>> "$LOG_PATH"/dmon.stderr.log
 

@@ -4,6 +4,7 @@ name: dmon
 
 templates:
   dmon_ctl.sh.erb: bin/dmon_ctl.sh
+  collect-canonical-data.erb: bin/collect-canonical-data
 
 packages:
 - dmon
@@ -18,3 +19,7 @@ properties:
   dmon.check_interval_seconds:
     default: 300
     description: "Seconds between filesystem checks."
+
+  dmon.debug_data_dir:
+    description: "The directory where collected debug data is stored"
+    default: /var/vcap/data/dmon-diagnostics

@@ -12,6 +12,7 @@ import (
 
 type Dmon struct {
 	EventEmitter   EventEmitter
+	DataCollector  DataCollector
 	ProcessManager ProcessManager
 }
 
@@ -20,11 +21,24 @@ type EventEmitter interface {
 	EmitEvent() error
 }
 
+//go:generate counterfeiter . DataCollector
+type DataCollector interface {
+	CollectData(logger lager.Logger)
+}
+
 //go:generate counterfeiter . ProcessManager
 type ProcessManager interface {
 	SpawnProcess(cmd *exec.Cmd) (int, error)
 	Wait(pid int) (int, error)
 }
+
+const (
+	timedOut                   = "timed-out"
+	runningDiskCheckingProcess = "running-disk-checking-process"
+	processExitedNonZero       = "process-exited-non-zero"
+	spawning                   = "spawning"
+	waiting                    = "waiting"
+)
 
 func (d *Dmon) CheckFilesystemAvailability(logger lager.Logger, dirToCheck string, writeTimeout time.Duration) error {
 	logger = logger.Session("checking-fs-availability", lager.Data{"dir_to_check": dirToCheck})
@@ -35,6 +49,9 @@ func (d *Dmon) CheckFilesystemAvailability(logger lager.Logger, dirToCheck strin
 		logger.Error(msg, err, data)
 		if eventErr := d.EventEmitter.EmitEvent(); eventErr != nil {
 			logger.Error("emitting-event", eventErr)
+		}
+		if msg == timedOut {
+			d.DataCollector.CollectData(logger)
 		}
 		return errors.Wrap(err, msg)
 	}
@@ -47,20 +64,20 @@ func (d *Dmon) CheckFilesystemAvailability(logger lager.Logger, dirToCheck strin
 	select {
 	case waitStatus := <-exitChan:
 		if waitStatus.err != nil {
-			return errs(waitStatus.err, "running-disk-checking-process", nil)
+			return errs(waitStatus.err, runningDiskCheckingProcess, nil)
 		}
 
 		if waitStatus.exitStatus != 0 {
 			return errs(
 				fmt.Errorf("expected exit status 0, got %d", waitStatus.exitStatus),
-				"process-exited-non-zero", lager.Data{"exit_status": waitStatus.exitStatus},
+				processExitedNonZero, lager.Data{"exit_status": waitStatus.exitStatus},
 			)
 		}
 
 		return nil
 
 	case <-time.After(writeTimeout):
-		return errs(fmt.Errorf("timed out after %dms", writeTimeout/time.Millisecond), "timed-out", nil)
+		return errs(fmt.Errorf("timed out after %dms", writeTimeout/time.Millisecond), timedOut, nil)
 	}
 }
 
@@ -76,12 +93,12 @@ func (d *Dmon) spawnAndWait(cmd *exec.Cmd, exitChan chan<- exitStatus) {
 
 	pid, err := d.ProcessManager.SpawnProcess(cmd)
 	if err != nil {
-		errs(err, "spawning")
+		errs(err, spawning)
 		return
 	}
 	exitCode, err := d.ProcessManager.Wait(pid)
 	if err != nil {
-		errs(err, "waiting")
+		errs(err, waiting)
 		return
 	}
 
