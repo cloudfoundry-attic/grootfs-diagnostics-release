@@ -12,4 +12,3 @@
     properties:
       dmon:
         dir_to_check: /var/vcap/data/grootfs/store/unprivileged
-        metron_endpoint: 127.0.0.1

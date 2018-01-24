@@ -10,8 +10,12 @@ packages:
 - dmon
 
 properties:
-  dmon.metron_endpoint:
-    description: "Metron endpoint."
+  metron_agent.listening_address:
+    description: "Copy of metron_agent.listening_address"
+    default: 127.0.0.1
+  metron_agent.listening_port:
+    description: "Copy of metron_agent.listening_port"
+    default: 3457
 
   dmon.dir_to_check:
     description: "Tries to create a file under this directory, to check filesystem availability."

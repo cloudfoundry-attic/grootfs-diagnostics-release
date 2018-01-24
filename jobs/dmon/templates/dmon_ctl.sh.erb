@@ -18,7 +18,7 @@ case $1 in
     while true; do
       # We don't bother killing dmon instances, as they will exit within 10s.
       /var/vcap/packages/dmon/bin/dmon \
-        --metron-endpoint "<%= p('dmon.metron_endpoint') %>" \
+        --metron-endpoint "<%= p('metron_agent.listening_address') %>:<%= p('metron_agent.listening_port') %>" \
         --debug-program "/var/vcap/jobs/dmon/bin/collect-canonical-data" \
         --debug-data-dir "<%= p('dmon.debug_data_dir') %>" \
         "<%= p('dmon.dir_to_check') %>" \
