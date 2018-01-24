@@ -1,0 +1,14 @@
+- type: replace
+  path: /releases/-
+  value:
+    name: grootfs-diagnostics
+    version: latest
+
+- type: replace
+  path: /instance_groups/name=diego-cell/jobs/-
+  value:
+    name: dmon
+    release: grootfs-diagnostics
+    properties:
+      dmon:
+        dir_to_check: /var/vcap/data/grootfs/store/unprivileged
